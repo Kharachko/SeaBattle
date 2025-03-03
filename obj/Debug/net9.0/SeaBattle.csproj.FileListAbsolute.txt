@@ -1,0 +1,14 @@
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\SeaBattle.exe
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\SeaBattle.deps.json
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\SeaBattle.runtimeconfig.json
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\SeaBattle.dll
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\SeaBattle.pdb
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.GeneratedMSBuildEditorConfig.editorconfig
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.AssemblyInfoInputs.cache
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.AssemblyInfo.cs
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.csproj.CoreCompileInputs.cache
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.dll
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\refint\SeaBattle.dll
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.pdb
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.genruntimeconfig.cache
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\ref\SeaBattle.dll
