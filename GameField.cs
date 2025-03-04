@@ -1,3 +1,4 @@
+// filepath: /d:/Student/UNI/itproject/lab/lab_1/SeaBattle/GameField.cs
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,16 @@ public class GameField
     private List<Ship> _ships;
     private List<(int x, int y)> _mines;
     private GameFieldFactory _factory;
+    private GameSettings _settings;
 
-    public GameField(int size, GameFieldFactory factory)
+    public GameField(int size, GameFieldFactory factory, GameSettings settings)
     {
         _size = size;
         _field = new char[_size, _size];
         _ships = new List<Ship>();
         _mines = new List<(int x, int y)>();
         _factory = factory;
+        _settings = settings;
         InitializeField();
     }
 
@@ -139,21 +142,55 @@ public class GameField
             {
                 if (showShips)
                 {
+                    SetConsoleColor(_field[i, j]);
                     Console.Write(_field[i, j] + " ");
+                    Console.ResetColor();
                 }
                 else
                 {
                     if (_field[i, j] == 'S' || _field[i, j] == 'M')
                     {
+                        SetConsoleColor('~');
                         Console.Write("~ ");
+                        Console.ResetColor();
                     }
                     else
                     {
+                        SetConsoleColor(_field[i, j]);
                         Console.Write(_field[i, j] + " ");
+                        Console.ResetColor();
                     }
                 }
             }
             Console.WriteLine();
+        }
+    }
+
+    private void SetConsoleColor(char symbol)
+    {
+        switch (symbol)
+        {
+            case 'S':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.ShipColor);
+                break;
+            case 'M':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.MineColor);
+                break;
+            case 'X':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.HitColor);
+                break;
+            case 'O':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.MissColor);
+                break;
+            case 'E':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.ExplosionColor);
+                break;
+            case '~':
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.FieldColor);
+                break;
+            default:
+                Console.ForegroundColor = GameSettings.HexToConsoleColor(_settings.DefaultColor);
+                break;
         }
     }
 

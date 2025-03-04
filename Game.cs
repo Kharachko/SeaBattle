@@ -13,8 +13,8 @@ public class Game
     {
         _settings = GameSettings.Load("appsettings.json");
         _factory = new GameFieldFactory();
-        _playerField = new GameField(_settings.FieldSize, _factory);
-        _enemyField = new GameField(_settings.FieldSize, _factory);
+        _playerField = new GameField(_settings.FieldSize, _factory, _settings);
+        _enemyField = new GameField(_settings.FieldSize, _factory, _settings);
         _random = new Random();
         PlaceShipsRandomly(_playerField, _settings.PlayerShipLengths);
         PlaceShipsRandomly(_enemyField, _settings.PlayerShipLengths);
