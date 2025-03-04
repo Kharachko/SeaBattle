@@ -7,5 +7,6 @@ class Program
         Console.WriteLine("Sea Battle");
         Game game = new Game();
         game.Play();
+ 
     }
 }

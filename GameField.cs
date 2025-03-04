@@ -1,14 +1,15 @@
 public class GameField
 {
-    private const int Size = 10;
+    private int _size;
     private char[,] _field;
     private List<Ship> _ships;
     private List<(int x, int y)> _mines;
     private List<(int x, int y)> _buffs;
 
-    public GameField()
+    public GameField(int size)
     {
-        _field = new char[Size, Size];
+        _size = size;
+        _field = new char[_size, _size];
         _ships = new List<Ship>();
         _mines = new List<(int x, int y)>();
         _buffs = new List<(int x, int y)>();
@@ -17,9 +18,9 @@ public class GameField
 
     private void InitializeField()
     {
-        for (int i = 0; i < Size; i++)
+        for (int i = 0; i < _size; i++)
         {
-            for (int j = 0; j < Size; j++)
+            for (int j = 0; j < _size; j++)
             {
                 _field[i, j] = '~';
             }
@@ -49,7 +50,7 @@ public class GameField
 
     public bool Shoot(int x, int y)
     {
-        if (x >= 0 && x < Size && y >= 0 && y < Size)
+        if (x >= 0 && x < _size && y >= 0 && y < _size)
         {
             if (_field[x, y] == 'S')
             {
@@ -98,7 +99,7 @@ public class GameField
         {
             for (int j = y - 1; j <= y + 1; j++)
             {
-                if (i >= 0 && i < Size && j >= 0 && j < Size)
+                if (i >= 0 && i < _size && j >= 0 && j < _size)
                 {
                     if (_field[i, j] == 'S')
                     {
@@ -135,16 +136,16 @@ public class GameField
     public void DisplayField(bool showShips = false)
     {
         Console.Write("  ");
-        for (int i = 0; i < Size; i++)
+        for (int i = 0; i < _size; i++)
         {
             Console.Write(i + " ");
         }
         Console.WriteLine();
 
-        for (int i = 0; i < Size; i++)
+        for (int i = 0; i < _size; i++)
         {
             Console.Write(i + " ");
-            for (int j = 0; j < Size; j++)
+            for (int j = 0; j < _size; j++)
             {
                 if (showShips)
                 {

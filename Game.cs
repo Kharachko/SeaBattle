@@ -1,18 +1,23 @@
+using System;
+using System.Collections.Generic;
+
 public class Game
 {
     private GameField _playerField;
     private GameField _enemyField;
     private Random _random;
+    private GameSettings _settings;
 
     public Game()
     {
-        _playerField = new GameField();
-        _enemyField = new GameField();
+        _settings = GameSettings.Load("appsettings.json");
+        _playerField = new GameField(_settings.FieldSize);
+        _enemyField = new GameField(_settings.FieldSize);
         _random = new Random();
-        PlaceShipsRandomly(_playerField, new List<int> { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 });
-        PlaceShipsRandomly(_enemyField, new List<int> { 4, 3, 3, 2, 2, 2, 1, 1, 1, 1 });
-        PlaceMinesAndBuffs(_playerField);
-        PlaceMinesAndBuffs(_enemyField);
+        PlaceShipsRandomly(_playerField, _settings.PlayerShipLengths);
+        PlaceShipsRandomly(_enemyField, _settings.EnemyShipLengths);
+        PlaceMinesAndBuffs(_playerField, _settings.NumberOfMines, _settings.NumberOfBuffs);
+        PlaceMinesAndBuffs(_enemyField, _settings.NumberOfMines, _settings.NumberOfBuffs);
     }
 
     private void PlaceShipsRandomly(GameField field, List<int> shipLengths)
@@ -22,8 +27,8 @@ public class Game
             bool placed = false;
             while (!placed)
             {
-                int x = _random.Next(0, 10);
-                int y = _random.Next(0, 10);
+                int x = _random.Next(0, _settings.FieldSize);
+                int y = _random.Next(0, _settings.FieldSize);
                 bool horizontal = _random.Next(2) == 0;
 
                 if (CanPlaceShip(field, x, y, length, horizontal))
@@ -35,19 +40,22 @@ public class Game
         }
     }
 
-    private void PlaceMinesAndBuffs(GameField field)
+    private void PlaceMinesAndBuffs(GameField field, int numberOfMines, int numberOfBuffs)
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < numberOfMines; i++)
         {
-            int x = _random.Next(0, 10);
-            int y = _random.Next(0, 10);
+            int x = _random.Next(0, _settings.FieldSize);
+            int y = _random.Next(0, _settings.FieldSize);
             if (!field.HasShip(x, y))
             {
                 field.PlaceMine(x, y);
             }
+        }
 
-            x = _random.Next(0, 10);
-            y = _random.Next(0, 10);
+        for (int i = 0; i < numberOfBuffs; i++)
+        {
+            int x = _random.Next(0, _settings.FieldSize);
+            int y = _random.Next(0, _settings.FieldSize);
             if (!field.HasShip(x, y))
             {
                 field.PlaceBuff(x, y);
@@ -62,7 +70,7 @@ public class Game
             int newX = x + (horizontal ? 0 : i);
             int newY = y + (horizontal ? i : 0);
 
-            if (newX >= 10 || newY >= 10 || field.HasShip(newX, newY))
+            if (newX >= _settings.FieldSize || newY >= _settings.FieldSize || field.HasShip(newX, newY))
             {
                 return false;
             }
@@ -72,8 +80,8 @@ public class Game
 
     private void EnemyTurn()
     {
-        int x = _random.Next(0, 10);
-        int y = _random.Next(0, 10);
+        int x = _random.Next(0, _settings.FieldSize);
+        int y = _random.Next(0, _settings.FieldSize);
 
         if (_playerField.Shoot(x, y))
         {
@@ -98,11 +106,7 @@ public class Game
             var input = Console.ReadLine()?.Split(' ');
             if (input != null && input.Length == 2 && int.TryParse(input[0], out int x) && int.TryParse(input[1], out int y))
             {
-                if (_enemyField.Shoot(x, y))
-                {
-                    // Message about hit is already displayed in Shoot method
-                }
-                else
+                if (!_enemyField.Shoot(x, y))
                 {
                     Console.WriteLine("Miss!");
                 }

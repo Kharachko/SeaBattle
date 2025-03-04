@@ -12,3 +12,7 @@ D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\refint\SeaBattle.d
 D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.pdb
 D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.genruntimeconfig.cache
 D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\ref\SeaBattle.dll
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.sourcelink.json
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\bin\Debug\net9.0\Newtonsoft.Json.dll
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.csproj.AssemblyReference.cache
+D:\Student\UNI\itproject\lab\lab_1\SeaBattle\obj\Debug\net9.0\SeaBattle.csproj.Up2Date
