@@ -5,8 +5,8 @@ using Newtonsoft.Json;
 public class GameSettings
 {
     public int FieldSize { get; set; }
-    public List<int> PlayerShipLengths { get; set; }
-    public List<int> EnemyShipLengths { get; set; }
+    public List<int> PlayerShipLengths { get; set; } = new List<int>();
+    public List<int> EnemyShipLengths { get; set; } = new List<int>();
     public int NumberOfMines { get; set; }
     public int NumberOfBuffs { get; set; }
 
@@ -18,6 +18,6 @@ public class GameSettings
         }
 
         var json = File.ReadAllText(filePath);
-        return JsonConvert.DeserializeObject<GameSettings>(json);
+        return JsonConvert.DeserializeObject<GameSettings>(json) ?? new GameSettings();
     }
 }

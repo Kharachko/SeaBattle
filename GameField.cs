@@ -1,18 +1,22 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 public class GameField
 {
     private int _size;
     private char[,] _field;
     private List<Ship> _ships;
     private List<(int x, int y)> _mines;
-    private List<(int x, int y)> _buffs;
+    private GameFieldFactory _factory;
 
-    public GameField(int size)
+    public GameField(int size, GameFieldFactory factory)
     {
         _size = size;
         _field = new char[_size, _size];
         _ships = new List<Ship>();
         _mines = new List<(int x, int y)>();
-        _buffs = new List<(int x, int y)>();
+        _factory = factory;
         InitializeField();
     }
 
@@ -27,25 +31,21 @@ public class GameField
         }
     }
 
-    public void PlaceShip(Ship ship)
+    public void PlaceShip(int x, int y, int length, bool horizontal)
     {
+        var ship = _factory.CreateShip(x, y, length, horizontal);
         _ships.Add(ship);
-        foreach (var (x, y) in ship.Cells)
+        foreach (var (sx, sy) in ship.Cells)
         {
-            _field[x, y] = 'S';
+            _field[sx, sy] = 'S';
         }
     }
 
-    public void PlaceMine(int x, int y)
+    public void PlaceMine()
     {
+        var (x, y) = _factory.CreateMine(_size);
         _mines.Add((x, y));
         _field[x, y] = 'M';
-    }
-
-    public void PlaceBuff(int x, int y)
-    {
-        _buffs.Add((x, y));
-        _field[x, y] = 'B';
     }
 
     public bool Shoot(int x, int y)
@@ -61,11 +61,11 @@ public class GameField
                     {
                         if (ship.IsSunk())
                         {
-                            Console.WriteLine("Ship destroyed!");
+                            Console.WriteLine("Ship destroyed at (" + x + ", " + y + ")!");
                         }
                         else
                         {
-                            Console.WriteLine("Hit!");
+                            Console.WriteLine("Hit at (" + x + ", " + y + ")!");
                         }
                     }
                 }
@@ -73,19 +73,14 @@ public class GameField
             }
             else if (_field[x, y] == 'M')
             {
-                _field[x, y] = 'O';
+                _field[x, y] = 'E';
                 DetonateMine(x, y);
-                return false;
-            }
-            else if (_field[x, y] == 'B')
-            {
-                _field[x, y] = 'O';
-                ApplyBuff(x, y);
                 return false;
             }
             else if (_field[x, y] == '~')
             {
                 _field[x, y] = 'O';
+                Console.WriteLine("Miss at (" + x + ", " + y + ")!");
                 return false;
             }
         }
@@ -94,7 +89,7 @@ public class GameField
 
     private void DetonateMine(int x, int y)
     {
-        Console.WriteLine("Mine exploded!");
+        Console.WriteLine("Mine exploded at (" + x + ", " + y + ")!");
         for (int i = x - 1; i <= x + 1; i++)
         {
             for (int j = y - 1; j <= y + 1; j++)
@@ -110,27 +105,22 @@ public class GameField
                             {
                                 if (ship.IsSunk())
                                 {
-                                    Console.WriteLine("Ship destroyed!");
+                                    Console.WriteLine("Ship destroyed at (" + i + ", " + j + ")!");
                                 }
                                 else
                                 {
-                                    Console.WriteLine("Hit!");
+                                    Console.WriteLine("Hit at (" + i + ", " + j + ")!");
                                 }
                             }
                         }
                     }
                     else if (_field[i, j] == '~')
                     {
-                        _field[i, j] = 'O';
+                        _field[i, j] = 'E';
                     }
                 }
             }
         }
-    }
-
-    private void ApplyBuff(int x, int y)
-    {
-        Console.WriteLine("You found a buff!");
     }
 
     public void DisplayField(bool showShips = false)
@@ -153,7 +143,7 @@ public class GameField
                 }
                 else
                 {
-                    if (_field[i, j] == 'S' || _field[i, j] == 'M' || _field[i, j] == 'B')
+                    if (_field[i, j] == 'S' || _field[i, j] == 'M')
                     {
                         Console.Write("~ ");
                     }

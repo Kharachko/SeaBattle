@@ -7,17 +7,19 @@ public class Game
     private GameField _enemyField;
     private Random _random;
     private GameSettings _settings;
+    private GameFieldFactory _factory;
 
     public Game()
     {
         _settings = GameSettings.Load("appsettings.json");
-        _playerField = new GameField(_settings.FieldSize);
-        _enemyField = new GameField(_settings.FieldSize);
+        _factory = new GameFieldFactory();
+        _playerField = new GameField(_settings.FieldSize, _factory);
+        _enemyField = new GameField(_settings.FieldSize, _factory);
         _random = new Random();
         PlaceShipsRandomly(_playerField, _settings.PlayerShipLengths);
-        PlaceShipsRandomly(_enemyField, _settings.EnemyShipLengths);
-        PlaceMinesAndBuffs(_playerField, _settings.NumberOfMines, _settings.NumberOfBuffs);
-        PlaceMinesAndBuffs(_enemyField, _settings.NumberOfMines, _settings.NumberOfBuffs);
+        PlaceShipsRandomly(_enemyField, _settings.PlayerShipLengths);
+        PlaceMines(_playerField, _settings.NumberOfMines);
+        PlaceMines(_enemyField, _settings.NumberOfMines);
     }
 
     private void PlaceShipsRandomly(GameField field, List<int> shipLengths)
@@ -33,33 +35,18 @@ public class Game
 
                 if (CanPlaceShip(field, x, y, length, horizontal))
                 {
-                    field.PlaceShip(new Ship(x, y, length, horizontal));
+                    field.PlaceShip(x, y, length, horizontal);
                     placed = true;
                 }
             }
         }
     }
 
-    private void PlaceMinesAndBuffs(GameField field, int numberOfMines, int numberOfBuffs)
+    private void PlaceMines(GameField field, int numberOfMines)
     {
         for (int i = 0; i < numberOfMines; i++)
         {
-            int x = _random.Next(0, _settings.FieldSize);
-            int y = _random.Next(0, _settings.FieldSize);
-            if (!field.HasShip(x, y))
-            {
-                field.PlaceMine(x, y);
-            }
-        }
-
-        for (int i = 0; i < numberOfBuffs; i++)
-        {
-            int x = _random.Next(0, _settings.FieldSize);
-            int y = _random.Next(0, _settings.FieldSize);
-            if (!field.HasShip(x, y))
-            {
-                field.PlaceBuff(x, y);
-            }
+            field.PlaceMine();
         }
     }
 
@@ -83,14 +70,7 @@ public class Game
         int x = _random.Next(0, _settings.FieldSize);
         int y = _random.Next(0, _settings.FieldSize);
 
-        if (_playerField.Shoot(x, y))
-        {
-            Console.WriteLine($"Enemy hit at ({x}, {y})!");
-        }
-        else
-        {
-            Console.WriteLine($"Enemy missed at ({x}, {y}).");
-        }
+        _playerField.Shoot(x, y);
     }
 
     public void Play()
@@ -106,10 +86,7 @@ public class Game
             var input = Console.ReadLine()?.Split(' ');
             if (input != null && input.Length == 2 && int.TryParse(input[0], out int x) && int.TryParse(input[1], out int y))
             {
-                if (!_enemyField.Shoot(x, y))
-                {
-                    Console.WriteLine("Miss!");
-                }
+                _enemyField.Shoot(x, y);
 
                 if (!_enemyField.AllShipsSunk())
                 {
